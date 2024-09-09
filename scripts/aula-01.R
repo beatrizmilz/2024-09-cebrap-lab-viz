@@ -60,7 +60,8 @@ dados_pnud_2010 |>
 
 
 
-# A função aes() define o mapeamento estético (aesthetics mapping) entre as colunas
+# A função aes() define o mapeamento estético (aesthetics mapping) 
+# entre as colunas
 # da base de dados (variáveis) e os elementos visuais do gráfico
 # (eixo, posição, cor, tamanho, etc)
 
@@ -112,7 +113,7 @@ dados_pnud_2010 |>
 
 # 8. A função geom_smooth() adiciona uma linha de tendência ao gráfico
 
-# 9. Podemos usar mais do que uma geometria no mesmo gráfico
+# 9. Podemos usar mais do que uma geometria no mesmo gráfico, e a ordem importa!
 
 # AES --------------------------------------------------------------------------
 # Explorando outros atributos estéticos!
@@ -123,8 +124,8 @@ dados_pnud_2010 |>
 
 dados_pnud_2010 |>
   ggplot() +
-  aes(x = idhm, y = espvida, color = regiao_nm) +
-  geom_point()
+  aes(x = idhm, y = espvida) +
+  geom_point(aes(color = regiao_nm))
 
 # Atributo estético: tamanho (size)
 
@@ -132,8 +133,8 @@ dados_pnud_2010 |>
 
 dados_pnud_2010 |>
   ggplot() +
-  aes(x = idhm, y = espvida, size = pop) +
-  geom_point()
+  aes(x = idhm, y = espvida) +
+  geom_point(aes(size = pop))
 
 # Atributo estético: forma (shape)
 
@@ -141,8 +142,8 @@ dados_pnud_2010 |>
 
 dados_pnud_2010 |>
   ggplot() +
-  aes(x = idhm, y = espvida, shape = regiao_nm) +
-  geom_point()
+  aes(x = idhm, y = espvida) +
+  geom_point(aes(shape = regiao_nm))
 
 # Atributo estético: transparência (alpha)
 
