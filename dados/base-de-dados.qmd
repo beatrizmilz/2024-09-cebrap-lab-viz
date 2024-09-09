@@ -1,0 +1,36 @@
+---
+title: "Base de dados"
+format:
+  html:
+    theme: yeti
+---
+
+```{{r}}
+remotes::install_github("abjur/abjData")
+```
+
+
+```{r}
+abjData::pnud_siglas # siglas
+abjData::pnud_min # resumo
+abjData::pnud_muni # base completa
+abjData::pnud_uf # uf
+
+readr::write_csv2(abjData::pnud_min, "base_pnud_muni.csv")
+readr::write_csv2(abjData::pnud_min, "base_pnud_min.csv")
+
+abjData::pnud_siglas |>
+  mutate(
+    sigla = case_when(
+      sigla == "idhm_ e" ~ "idhm_e",
+      sigla == "uf" ~ "uf_sigla",
+      sigla == "codmun7" ~ "muni_id",
+      sigla == "nomemun" ~ "muni_nm",
+      TRUE ~ sigla
+    )
+  ) |>
+  filter(sigla %in% names(abjData::pnud_min)) |>
+  arrange(sigla) |>
+  readr::write_csv2("dicionario_base_pnud_min.csv")
+```
+

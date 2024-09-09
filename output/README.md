@@ -1,0 +1,1 @@
+Nesta pasta (output), salvamos os arquivos gerados no R.

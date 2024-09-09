@@ -1,0 +1,158 @@
+---
+title: "cebrap.lab online  - Visualização de dados no R"
+subtitle: "Introdução ao curso"
+format:
+  revealjs:
+    incremental: false
+    logo: "https://cursos.cebrap.org.br/wp-content/uploads/2022/02/logo-nav.png"
+    footer: "Slides por [Beatriz Milz](https://beatrizmilz.com), feitos com [Quarto](https://quarto.org/docs/presentations/revealjs/index.html). Códigos e materiais disponíveis no [GitHub](https://github.com/beatrizmilz/2023-08-cebrap-lab-viz). Licença de uso: [CC-BY-SA](https://beatrizmilz.com/license/)."
+    theme: ["custom.scss"]
+    slide-number: c/t
+    show-slide-number: all
+    hash-type: number
+editor: visual
+lang: pt
+author: "Beatriz Milz"
+date: '2024-09-27'
+date-format: 'MMMM [de] YYYY'
+---
+
+## Ministrante
+
+[![](img/beatriz-github.png){fig-align="center" width="60%"}](https://github.com/beatrizmilz)
+
+## Informações gerais
+
+-   **Data/horário:** 23 a 27 de setembro/2024;
+    -   Segunda, Quarta e Sexta: aula ao vivo, online, das 19h00 às 22h00.
+    -   Terça e quinta: haverão tarefas para casa, para praticar os conceitos.
+
+## Pré-requisitos
+
+-   `R` e `RStudio` instalados no seu computador:
+
+-   Links para instalação:
+
+    -   [R](https://cran.r-project.org/)
+    -   [RStudio](https://posit.co/download/rstudio-desktop/)
+
+-   Instalar pacotes:
+
+```{r, eval=FALSE, echo = TRUE}
+install.packages(c(
+  "tidyverse",
+  "sf",
+  "geobr",
+  "esquisse"
+))
+```
+
+## Plano das aulas
+
+-   Temas:
+
+    -   Conceitos importantes
+
+    -   Introdução à criação de gráficos com `ggplot2`
+
+    -   Exportando os gráficos para publicação
+
+    -   Introdução à criação de mapas com `ggplot2`, `sf` e `geobr`
+
+## Quais dados vamos usar?
+
+Dados disponibilizados no pacote [abjData](https://abjur.github.io/abjData/).
+
+-   `pnud_min`: Um conjunto de dados, que contém informações disponibilizadas pelo Programa das Nações Unidas para o Desenvolvimento (PNUD). Os indicadores foram extraídos dos Censos Demográficos de 1991, 2000 e 2010. As informações estão organizadas a nível de municípios. Fonte: [Site do PNUD](https://www.br.undp.org/content/brazil/pt/home/idh0/atlas-do-desenvolvimento-humano/atlas-dos-municipios.html).
+
+## Quais dados vamos usar?
+
+```{r}
+library(tidyverse)
+dados_pnud <- read_csv2("../dados/base_pnud_min.csv")
+glimpse(dados_pnud)
+```
+
+## Para que servem as visualizações?
+
+-   Uma base de dados contém toda a informação que precisamos.
+
+-   No entanto, não somos capazes de tirar conclusões apenas olhando essas bases.
+
+-   Por isso, é necessário resumir esses dados em estatísticas.
+
+-   Nem sempre as estatísticas (os números) são úteis para uma comunicação efetiva... Por isso, faz sentido mostrá-las usando formas, cores e outros elementos que facilitam a absorção da informação pelas pessoas.
+
+-   Para o [Hadley Wickham](https://hadley.nz), visualizar dados serve para **surpreender**.
+
+::: footer
+Slide do curso de [Visualização de Dados](https://curso-r.github.io/main-visualizacao/slides/slides.html), da [Curso-R](https://curso-r.com), ministrado por mim e [Julio Trecenti](https://br.linkedin.com/in/jtrecenti).
+:::
+
+## Ciclo da Ciência de Dados
+
+<img src="img/ciclo-ciencia-de-dados.png" style="display: block; margin-left: auto; margin-right: auto;"/>
+
+::: footer
+Slide do curso de [Visualização de Dados](https://curso-r.github.io/main-visualizacao/slides/slides.html), da [Curso-R](https://curso-r.com), ministrado por mim e [Julio Trecenti](https://br.linkedin.com/in/jtrecenti).
+:::
+
+## Visualização no ciclo da Ciência de Dados
+
+<img src="img/ciclo-ciencia-de-dados-vis.png" style="display: block; margin-left: auto; margin-right: auto;"/>
+
+::: footer
+Slide do curso de [Visualização de Dados](https://curso-r.github.io/main-visualizacao/slides/slides.html), da [Curso-R](https://curso-r.com), ministrado por mim e [Julio Trecenti](https://br.linkedin.com/in/jtrecenti).
+:::
+
+# Análise exploratória x Análise Descritiva
+
+## Análise exploratória
+
+-   É um trabalho de **investigação** de dados
+-   A ferramenta: precisa ser **rápida** de programar
+-   O objetivo é **aprender** com os dados
+
+```{r}
+#| fig-align: "center"
+#| out-width: "70%"
+ggplot2::ggplot(cars) +
+  ggplot2::aes(speed, dist) +
+  ggplot2::geom_point()
+```
+
+::: footer
+Slide do curso de [Visualização de Dados](https://curso-r.github.io/main-visualizacao/slides/slides.html), da [Curso-R](https://curso-r.com), ministrado por mim e [Julio Trecenti](https://br.linkedin.com/in/jtrecenti).
+:::
+
+## Análise descritiva (ou explicativa)
+
+-   É um trabalho de **otimização visual**
+-   A ferramenta: precisa ser **customizável**
+-   O objetivo é **comunicar**
+
+```{r}
+#| fig-align: "center"
+#| out-width: "70%"
+ggplot2::ggplot(cars) +
+  ggplot2::aes(speed, dist) +
+  ggplot2::geom_point(colour = "darkblue") +
+  ggplot2::stat_smooth(
+    se = FALSE, colour = "lightgray", method = "loess",
+    formula = "y~x"
+  ) +
+  ggplot2::theme_minimal(14) +
+  ggplot2::labs(
+    title = "A velocidade influencia na distância de parada?",
+    subtitle = "Distância necessária para parar o carro",
+    caption = "Fonte: Ezekiel, M. (1930) Methods of Correlation Analysis. Wiley",
+    x = "Velocidade",
+    y = "Distância para parar"
+  )
+```
+
+::: footer
+Slide do curso de [Visualização de Dados](https://curso-r.github.io/main-visualizacao/slides/slides.html), da [Curso-R](https://curso-r.com), ministrado por mim e [Julio Trecenti](https://br.linkedin.com/in/jtrecenti).
+:::
+
+## Vamos começar? {.middle .center}

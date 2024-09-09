@@ -1,0 +1,144 @@
+---
+title: "cebrap.lab online  - Visualização de dados no R"
+subtitle: "Mapas com R - Conceitos"
+format:
+  revealjs:
+    incremental: false
+    logo: "https://cursos.cebrap.org.br/wp-content/uploads/2022/02/logo-nav.png"
+    footer: "Slides por [Beatriz Milz](https://beatrizmilz.com), feitos com [Quarto](https://quarto.org/docs/presentations/revealjs/index.html). Códigos e materiais disponíveis no [GitHub](https://github.com/beatrizmilz/2023-08-cebrap-lab-viz). Licença de uso: [CC-BY-SA](https://beatrizmilz.com/license/)."
+    theme: ["custom.scss"]
+    slide-number: c/t
+    show-slide-number: all
+    hash-type: number
+editor: visual
+lang: pt
+author: "Beatriz Milz"
+date: '2024-09-27'
+date-format: 'MMMM [de] YYYY'
+---
+
+## Conceitos importantes: Vetor x Raster
+
+![](img/vector-raster_1644589693.jpeg){fig-align="center"}
+
+::: footer
+Fonte da imagem: <https://guides.lib.uw.edu/>
+:::
+
+## Raster - Exemplos!
+
+-   Mais comum: imagens de satélite.
+
+    [![](img/earthexplorer.png)](https://earthexplorer.usgs.gov/)
+
+::: footer
+Fonte da imagem: <https://earthexplorer.usgs.gov/>
+:::
+
+## Vetor - Exemplos!
+
+-   **Pontos**: localização de uma escola, ponto de coleta, etc.
+
+-   **Linhas**: ruas/estradas/rodovias, rios, etc.
+
+-   **Polígonos**: delimitação de cidades, estados, países, etc.
+
+## Vamos trabalhar com vetores!
+
+```{r}
+library(ggplot2)
+library(sf)
+```
+
+## Pontos...
+
+```{r, cache=TRUE}
+escolas <- readr::read_rds("../dados/geobr/escolas_brasilia.Rds")
+
+mapa_escolas <- escolas |>
+  ggplot() +
+  geom_sf() +
+  theme_void()
+
+mapa_escolas
+```
+
+## Linhas...
+
+```{r, cache=TRUE}
+rodovias <- readr::read_rds("../dados/rodovias_df.Rds")
+
+mapa_rodovias <- rodovias |>
+  ggplot() +
+  geom_sf() +
+  theme_void()
+
+mapa_rodovias
+```
+
+## Polígonos
+
+```{r, cache=TRUE}
+estados <- readr::read_rds("../dados/geobr/estado_df.Rds")
+
+mapa_estados <- estados |>
+  ggplot() +
+  geom_sf() +
+  theme_void()
+
+mapa_estados
+```
+
+## Camadas!
+
+```{r}
+ggplot() +
+  geom_sf(data = estados, fill = "white") +
+  geom_sf(data = escolas, color = "gray", alpha = 0.8) +
+  geom_sf(data = rodovias, color = "brown") +
+  theme_void()
+```
+
+## Principais pacotes
+
+[![](https://geocompr.robinlovelace.net/figures/01-cranlogs.png){fig-align="center"}](https://geocompr.robinlovelace.net/intro.html)
+
+::: footer
+Fonte da imagem: <https://geocompr.robinlovelace.net/intro.html>
+:::
+
+## Vamos usar o sf!
+
+[![](img/sf_horst.png){fig-align="center"}](https://github.com/allisonhorst/stats-illustrations)
+
+::: footer
+Fonte da imagem: <https://github.com/allisonhorst/stats-illustrations>
+:::
+
+## Mapas estáticos: ggplot2
+
+[![](img/ggplot2_bea.png)](https://beamilz.com/posts/2020-07-27-criando-mapas-com-os-pacotes-tidyverse-e-geobr/pt/)
+
+::: footer
+Fonte da imagem: <https://beamilz.com/posts/2020-07-27-criando-mapas-com-os-pacotes-tidyverse-e-geobr/pt/>
+:::
+
+## Mapas interativos: leaflet
+
+[![](img/leaflet.png){fig-align="center"}](https://github.com/allisonhorst/stats-illustrations)
+
+::: footer
+Fonte da imagem: <https://rstudio.github.io/leaflet/>
+:::
+
+## Vamos ao R!
+
+![](https://c.tenor.com/y2JXkY1pXkwAAAAC/cat-computer.gif){fig-align="center"}
+
+## Referências
+
+-   [Capítulo 15: Dados geoespaciais - Livro Análises Ecológicas no R](https://analises-ecologicas.netlify.app/cap15.html)
+
+-   [Livro Geocomputation with R](https://geocompr.robinlovelace.net/intro.html)
+
+-   [A Gentle Introduction to GIS - QGIS Documentation](https://docs.qgis.org/3.22/en/docs/gentle_gis_introduction/)
