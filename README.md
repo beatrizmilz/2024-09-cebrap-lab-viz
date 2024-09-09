@@ -21,7 +21,9 @@ Para saber de próximos oferecimentos, entre em contato com
 
 ## Materiais
 
-Em breve!
+- [Pasta compactada (`.zip`) com materiais do curso: scripts, dados,
+  slides, exercícios,
+  etc.](https://github.com/beatrizmilz/2024-09-cebrap-lab-viz/archive/refs/heads/main.zip)
 
 ### Slides
 
@@ -32,6 +34,8 @@ Em breve!
   mapas](https://beatrizmilz.github.io/2024-09-cebrap-lab-viz/slides/mapas-com-r.html#/)
 
 ### Scripts pós aula
+
+Em breve!
 
 <!-- -  [Aula 1](https://github.com/beatrizmilz/2024-09-cebrap-lab-viz/blob/main/scripts-pos-aula/aula-01.R) -->
 <!-- -  [Aula 2](https://github.com/beatrizmilz/2024-09-cebrap-lab-viz/blob/main/scripts-pos-aula/aula-02.R) -->
