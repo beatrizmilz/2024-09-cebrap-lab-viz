@@ -32,14 +32,40 @@ library(abjData)
 
 # Quais funções para acessar cada dataset: `geobr::list_geobr()`
 
-geobr::list_geobr()
+# geobr::list_geobr()
 
+list_geobr() |> View()
+
+# cuidado com o View()
+
+# mudar o sistema de refencias
+# sf::st_set_crs()
 # Exemplos:
 
 
 # geobr::read_country() # importa a delimitação do Brasil
 
+brasil <- read_country()
+
+brasil |> 
+  ggplot() + 
+  geom_sf()
+
 # geobr::read_state() # importa a delimitação dos estados do Brasil
+
+estados <- read_state()
+
+estados |> 
+  ggplot() +
+  geom_sf()
+
+
+mg <- read_state("MG")
+
+mg |> 
+  ggplot() +
+  geom_sf()
+
 
 # geobr::read_state("DF") # importa a delimitação de um Estado específico,
 #  usando a sigla
@@ -49,6 +75,21 @@ geobr::list_geobr()
 
 # geobr::read_municipality(code_muni = 3550308) # importa a delimitação
 # de um município específico, usando o código do IBGE do município.
+
+osasco <- geobr::read_municipality(code_muni = 	3534401)
+sp <- read_state("SP")
+
+osasco |> 
+  ggplot() +
+  geom_sf()
+
+
+# Podemos usar esses diferentes objetos como camadas do gráfico ----
+
+ggplot() +
+ geom_sf(data = estados, color = "gray") +
+  geom_sf(data = sp, color = "blue") +
+  geom_sf(data = osasco, color = "red", fill = "red")
 
 
 
@@ -128,6 +169,11 @@ estados %>%
 
 class(abjData::pnud_uf)
 
+# quando for fazer join, usar primeiro a base que tem
+# a coluna geom (a base de classe sf)
+
+
+
 pnud_uf_sf <- estados %>%
   left_join(abjData::pnud_uf, by = c("code_state" = "uf"))
 
@@ -141,6 +187,7 @@ class(pnud_uf_sf)
 # glimpse(pnud_uf_sf)
 
 pnud_uf_sf %>%
+  filter(ano == 2010) |> 
   ggplot(aes(fill = idhm)) +
   geom_sf() +
   theme_void()
@@ -277,7 +324,7 @@ rodovias_df <- readr::read_rds("dados/rodovias_df.Rds")
 
 
 ggplot() +
-  geom_sf(data = rodovias_df)
+  geom_sf(data = rodovias_df, aes(color = ds_legenda))
 
 
 
@@ -299,21 +346,41 @@ ggplot() +
 
 
 
-# Praticar com os dados do abjData :) ---
+# Praticar com os dados do abjData :)
 # Turma sugerir algum mapa para fazer com os dados do abjData
 # que já estamos usando no curso!
 
-# Carregar pacote tidyverse
 library(tidyverse)
+library(sf)
+library(geobr)
 
-# IMPORTAÇÃO 
 dados_pnud <- read_csv2("dados/base_pnud_min.csv")
 
 dados_pnud_2010 <- dados_pnud |>
-  filter(ano == 2010) 
+  filter(ano == 2010)
 
 
+# pontos - com lat/lon da base
 dados_pnud_2010 |> 
-  sf::st_as_sf(coords = c( "lon", "lat")) |> 
+  # cria a coluna geom baseado nas colunas lat/lon
+  st_as_sf(coords = c("lon", "lat")) |> 
+  ggplot() +
+  geom_sf(aes(color = espvida), alpha = 0.3)
+# Como abrir arquivos externos, como shapefiles ou geopackages? ----
+
+# ler shapefile, ou geopackage
+# sf::read_sf("arquivo.shp")
+# escrever um geopackage
+# sf::write_sf("nome_arquivo.gpkg")
+
+
+# Abrindo shape
+# https://transparencia.metrosp.com.br/dataset/pesquisa-origem-e-destino
+od97 <- sf::read_sf(
+"~/Downloads/Pesquisa Origem Destino 1977/Mapas/Shape/Zonas1977_region.shp"
+)
+
+od97 |> 
   ggplot() +
   geom_sf()
+
