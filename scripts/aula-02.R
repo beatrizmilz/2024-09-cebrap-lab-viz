@@ -31,8 +31,8 @@ media_idhm_por_uf |>
 media_idhm_por_uf_ordenado <- dados_pnud_2010 |>
   group_by(regiao_nm, uf_sigla) |>
   summarise(media_idhm = mean(idhm)) |>
-  dplyr::ungroup() |>
-  dplyr::mutate(uf_sigla = fct_reorder(uf_sigla, media_idhm))
+  ungroup() |>
+  mutate(uf_sigla = fct_reorder(uf_sigla, media_idhm))
 
 media_idhm_por_uf_ordenado |>
   ggplot() +
@@ -56,6 +56,30 @@ exemplo_grafico
 # Labels (textos dos eixos, título, subtítulo, legenda, etc) -----
 
 # Função labs()
+
+
+exemplo_grafico +
+  labs(
+    # elementos relacionados à atributos estéticos
+    # vai depender dos atributos usados no gráfico
+    # dentro da função aes()
+    x = "Média do IDHm",
+    y = "Sigla da UF", 
+    fill = "Região",
+    # color = "....",
+    # linetype = "....",
+    # size = "....",
+    
+    # elementos que sempre estão disponíveis,
+    # tem informações sobre o gráfico
+    title = "Média do IDHm por UF em 2010",
+    subtitle = "Cores representam a região",
+    caption = "Fonte: Dados do PNUD referentes ao Censo.
+  Dados extraídos usando o pacote abjData, 
+  criado pela Associação Brasileira de Jurimetria."
+  )
+
+
 
 exemplo_grafico +
   labs(
@@ -81,6 +105,9 @@ exemplo_grafico +
 exemplo_grafico +
   theme_minimal()
 
+exemplo_grafico + 
+  theme_void()
+
 # Dica: explore os temas disponíveis no pacote ggthemes
 
 library(ggthemes)
@@ -91,6 +118,8 @@ exemplo_grafico +
 exemplo_grafico +
   theme_fivethirtyeight()
 
+exemplo_grafico +
+  theme_economist()
 
 # Personalizando um tema
 
@@ -126,6 +155,7 @@ exemplo_grafico +
       face = "italic"
     ),
     plot.title = element_text(
+      family = "Times New Roman", 
       color = "purple",
       size = 30,
       face = "bold"
@@ -157,6 +187,72 @@ exemplo_grafico +
       fill = "lightblue"
     )
   )
+
+# Personalizar o tema em uma função ---
+nosso_tema <- function() {
+  theme(
+    axis.title.x = element_text(
+      color = "red",
+      size = 20,
+      face = "bold"
+    ),
+    axis.title.y = element_text(
+      color = "blue",
+      size = 20,
+      face = "italic"
+    ),
+    axis.text.x = element_text(
+      color = "green",
+      size = 15,
+      face = "bold"
+    ),
+    axis.text.y = element_text(
+      color = "orange",
+      size = 15,
+      face = "italic"
+    ),
+    plot.title = element_text(
+      family = "Times New Roman",
+      color = "purple",
+      size = 30,
+      face = "bold"
+    ),
+    plot.subtitle = element_text(
+      color = "black",
+      size = 20,
+      face = "italic"
+    ),
+    plot.caption = element_text(
+      color = "gray",
+      size = 10,
+      face = "bold"
+    ),
+    legend.title = element_text(
+      color = "brown",
+      size = 20,
+      face = "italic"
+    ),
+    legend.text = element_text(
+      color = "pink",
+      size = 15,
+      face = "bold"
+    ),
+    plot.background = element_rect(fill = "pink"),
+    panel.background = element_rect(fill = "lightblue")
+  )
+}
+
+
+exemplo_grafico +
+  labs(
+    x = "IDHM médio",
+    y = "UF",
+    title = "IDHM médio por UF",
+    subtitle = "Ano de 2010",
+    caption = "Fonte: PNUD, dados disponíveis no pacote abjData.",
+    fill = "Região"
+  ) +
+  nosso_tema()
 
 # Escalas ----------------
 
@@ -191,10 +287,11 @@ exemplo_grafico_2 <- media_idhm_por_uf_ordenado |>
 exemplo_grafico_2 +
   scale_fill_viridis_c()
 
+# degradê
 exemplo_grafico_2 +
   scale_fill_continuous(
-    low = "blue",
-    high = "red"
+    low =  "red",
+    high = "green", 
   )
 
 
@@ -223,6 +320,33 @@ media_idhm_por_uf_ordenado |>
 # Existem outros tipos de funções de escala!
 # Inicialmente o melhor é focar nas escalas de cores,
 # E pesquisar funções específicas quando necessário
+
+# Escala dos eixos
+exemplo_grafico +
+  scale_x_continuous(limits = c(0, 1),
+                     breaks = seq(0, 1, 0.20))
+
+# Escala de datas
+
+url_mananciais <- "https://github.com/beatrizmilz/mananciais/raw/master/inst/extdata/mananciais.csv"
+
+# Lendo o arquivo csv (separado por ponto e vírgula)
+mananciais <- read_csv2(url_mananciais)
+
+Sys.setlocale("LC_ALL", "pt_br.utf-8") 
+
+mananciais |> 
+  filter(data >= as.Date("2023-01-01")) |> 
+  ggplot() +
+  aes(x = data, y = volume_porcentagem) +
+  geom_line(aes(color = sistema)) +
+  facet_wrap(~sistema) +
+  scale_x_date(
+    date_breaks = "2 months",
+    date_labels = "%b"
+  )
+
+
 
 # Exportar os gráficos ----------------
 
@@ -257,8 +381,19 @@ ggsave(
   width = 10,
   height = 6,
   units = "in",
-  dpi = 300
+  dpi = 600
 )
+
+
+ggsave(
+  filename = "output/exemplo_grafico_exportar.svg",
+  plot = exemplo_grafico_3,
+  width = 10,
+  height = 6,
+  units = "in",
+  dpi = 600
+)
+
 
 # Juntar gráficos ----------------
 
@@ -289,11 +424,20 @@ exemplo_grafico_4 <- dados_pnud_2010 |>
     legend.position = "bottom"
   )
 
-
+# Combinar gráficos em uma única figura ---------
 library(patchwork)
 
-grafico_unido <- exemplo_grafico_3 + exemplo_grafico_4
+# Podemos "somar gráficos"
+exemplo_grafico_3 + exemplo_grafico_4 
 
+
+# Ou podemos usar as funções auxiliares para organizar melhor a figura
+grafico_unido <- exemplo_grafico_3 + exemplo_grafico_4  +
+  plot_annotation(tag_levels = 'A') +
+  plot_layout(nrow = 2)
+
+
+# salvar em uma imagem
 ggsave(
   filename = "output/exemplo_grafico_unido.png",
   plot = grafico_unido,
