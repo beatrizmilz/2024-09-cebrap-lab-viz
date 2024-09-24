@@ -35,9 +35,9 @@ Para saber de próximos oferecimentos, entre em contato com
 
 ### Scripts pós aula
 
-Em breve!
+- [Aula
+  1](https://github.com/beatrizmilz/2024-09-cebrap-lab-viz/blob/main/scripts-pos-aula/aula-01.R)
 
-<!-- -  [Aula 1](https://github.com/beatrizmilz/2024-09-cebrap-lab-viz/blob/main/scripts-pos-aula/aula-01.R) -->
 <!-- -  [Aula 2](https://github.com/beatrizmilz/2024-09-cebrap-lab-viz/blob/main/scripts-pos-aula/aula-02.R) -->
 <!-- -  [Dúvida - Linha do tempo](https://github.com/beatrizmilz/2024-09-cebrap-lab-viz/blob/main/scripts-pos-aula/duvida-linha-do-tempo.R) -->
 <!-- -  [Aula 3](https://github.com/beatrizmilz/2024-09-cebrap-lab-viz/blob/main/scripts-pos-aula/aula-03.R) -->
