@@ -531,21 +531,28 @@ exemplo_grafico_3 <- media_idhm_por_uf |>
     fill = "IDHM médio"
   ) +
   theme(
-    legend.position = "bottom"
+    legend.position = "right"
   )
 
-# Função ggsave()
+exemplo_grafico_3
+
+# Função ggsave() --------
+
+# mais simples
+ggsave("grafico.png", exemplo_grafico_3)
 
 ggsave(
   filename = "output/exemplo_grafico_exportar.png",
   plot = exemplo_grafico_3,
-  width = 10,
-  height = 6,
-  units = "in",
-  dpi = 600
+  width = 10, # largura
+  height = 10, # altura
+  units = "in", # unidade de medida
+  dpi = 600 # dots per inch, 
+  # quanto maior o dpi, maior a qualidade e resolução
+  # e tamanho do arquivo
 )
 
-
+library(svglite)
 ggsave(
   filename = "output/exemplo_grafico_exportar.svg",
   plot = exemplo_grafico_3,
@@ -579,10 +586,10 @@ exemplo_grafico_4 <- dados_pnud_2010 |>
     title = "População por UF",
     subtitle = "Ano de 2010",
     caption = "Fonte: PNUD, dados disponíveis no pacote abjData.",
-    fill = "População (em milhões)"
+    fill = "População\n(em milhões)"
   ) +
   theme(
-    legend.position = "bottom"
+    legend.position = "right"
   )
 
 # Combinar gráficos em uma única figura ---------
@@ -594,9 +601,12 @@ exemplo_grafico_3 + exemplo_grafico_4
 
 # Ou podemos usar as funções auxiliares para organizar melhor a figura
 grafico_unido <- exemplo_grafico_3 + exemplo_grafico_4  +
-  plot_annotation(tag_levels = 'A') +
-  plot_layout(nrow = 2)
+  plot_annotation(tag_levels = '1', 
+                  tag_suffix = "",
+                  tag_prefix = "Gráfico ") +
+  plot_layout(ncol = 2)
 
+grafico_unido
 
 # salvar em uma imagem
 ggsave(
@@ -607,3 +617,6 @@ ggsave(
   units = "in",
   dpi = 300
 )
+
+# alternativa ao +
+wrap_plots(exemplo_grafico_3, exemplo_grafico_4)
