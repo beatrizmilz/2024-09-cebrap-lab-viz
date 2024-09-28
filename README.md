@@ -44,9 +44,8 @@ Para saber de próximos oferecimentos, entre em contato com
 - [Aula
   2](https://github.com/beatrizmilz/2024-09-cebrap-lab-viz/blob/main/scripts-pos-aula/aula-02.R)
 
-<!-- -  [Dúvida - Linha do tempo](https://github.com/beatrizmilz/2024-09-cebrap-lab-viz/blob/main/scripts-pos-aula/duvida-linha-do-tempo.R) -->
-<!-- -  [Aula 3](https://github.com/beatrizmilz/2024-09-cebrap-lab-viz/blob/main/scripts-pos-aula/aula-03.R) -->
-<!-- -  [Aula 3 - Esquisse](https://github.com/beatrizmilz/2024-09-cebrap-lab-viz/blob/main/scripts-pos-aula/esquisse.R) -->
+- [Aula
+  3](https://github.com/beatrizmilz/2024-09-cebrap-lab-viz/blob/main/scripts-pos-aula/aula-03.R)
 
 ### Exercícios
 
